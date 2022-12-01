@@ -2,7 +2,8 @@
 Chip 8 emulator written in C#
 
 ## Build
-Open VirtualC8.sln on Visual Studio 2019 and Build the Solution
+1) Open VirtualC8.sln on Visual Studio 2022 and Build the Solution. 
+2) Copy a SDL release dll to the executable folder
 
 ## Run
 Drag and drop the rom file over the executable to play.
