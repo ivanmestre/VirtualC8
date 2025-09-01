@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
-using SDL2;
+using SDL3;
 
 namespace VirtualC8
 {
@@ -58,25 +58,25 @@ namespace VirtualC8
             }
         }
 
-        public Dictionary<string, SDL.SDL_Keycode> convertKeys()
+        public Dictionary<string, SDL.Keycode> convertKeys()
         {
-            Dictionary<string, SDL.SDL_Keycode> sdlKeys = new Dictionary<string, SDL.SDL_Keycode>();
-            sdlKeys["1"] = SDL.SDL_GetKeyFromName(this.keys["1"]);
-            sdlKeys["2"] = SDL.SDL_GetKeyFromName(this.keys["2"]);
-            sdlKeys["3"] = SDL.SDL_GetKeyFromName(this.keys["3"]);
-            sdlKeys["C"] = SDL.SDL_GetKeyFromName(this.keys["C"]);
-            sdlKeys["4"] = SDL.SDL_GetKeyFromName(this.keys["4"]);
-            sdlKeys["5"] = SDL.SDL_GetKeyFromName(this.keys["5"]);
-            sdlKeys["6"] = SDL.SDL_GetKeyFromName(this.keys["6"]);
-            sdlKeys["D"] = SDL.SDL_GetKeyFromName(this.keys["D"]);
-            sdlKeys["7"] = SDL.SDL_GetKeyFromName(this.keys["7"]);
-            sdlKeys["8"] = SDL.SDL_GetKeyFromName(this.keys["8"]);
-            sdlKeys["9"] = SDL.SDL_GetKeyFromName(this.keys["9"]);
-            sdlKeys["E"] = SDL.SDL_GetKeyFromName(this.keys["E"]);
-            sdlKeys["A"] = SDL.SDL_GetKeyFromName(this.keys["A"]);
-            sdlKeys["0"] = SDL.SDL_GetKeyFromName(this.keys["0"]);
-            sdlKeys["B"] = SDL.SDL_GetKeyFromName(this.keys["B"]);
-            sdlKeys["F"] = SDL.SDL_GetKeyFromName(this.keys["F"]);
+            Dictionary<string, SDL.Keycode> sdlKeys = new Dictionary<string, SDL.Keycode>();
+            sdlKeys["1"] = SDL.GetKeyFromName(this.keys["1"]);
+            sdlKeys["2"] = SDL.GetKeyFromName(this.keys["2"]);
+            sdlKeys["3"] = SDL.GetKeyFromName(this.keys["3"]);
+            sdlKeys["C"] = SDL.GetKeyFromName(this.keys["C"]);
+            sdlKeys["4"] = SDL.GetKeyFromName(this.keys["4"]);
+            sdlKeys["5"] = SDL.GetKeyFromName(this.keys["5"]);
+            sdlKeys["6"] = SDL.GetKeyFromName(this.keys["6"]);
+            sdlKeys["D"] = SDL.GetKeyFromName(this.keys["D"]);
+            sdlKeys["7"] = SDL.GetKeyFromName(this.keys["7"]);
+            sdlKeys["8"] = SDL.GetKeyFromName(this.keys["8"]);
+            sdlKeys["9"] = SDL.GetKeyFromName(this.keys["9"]);
+            sdlKeys["E"] = SDL.GetKeyFromName(this.keys["E"]);
+            sdlKeys["A"] = SDL.GetKeyFromName(this.keys["A"]);
+            sdlKeys["0"] = SDL.GetKeyFromName(this.keys["0"]);
+            sdlKeys["B"] = SDL.GetKeyFromName(this.keys["B"]);
+            sdlKeys["F"] = SDL.GetKeyFromName(this.keys["F"]);
             return sdlKeys;
         }
     }

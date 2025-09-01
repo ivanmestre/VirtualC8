@@ -1,5 +1,5 @@
 ﻿using System;
-using SDL2;
+using SDL3;
 using System.Collections.Generic;
 
 namespace VirtualC8
@@ -11,40 +11,38 @@ namespace VirtualC8
             Settings settings = new Settings();
             settings.LoadSettings();
 
-            Dictionary<string, SDL.SDL_Keycode> keys = settings.convertKeys();
+            Dictionary<string, SDL.Keycode> keys = settings.convertKeys();
 
-            SDL.SDL_SetHint(SDL.SDL_HINT_WINDOWS_DISABLE_THREAD_NAMING, "1");
-            if (SDL.SDL_Init(SDL.SDL_INIT_VIDEO | SDL.SDL_INIT_AUDIO) < 0)
+            if (SDL.Init(SDL.InitFlags.Video | SDL.InitFlags.Audio))
             {
-                Console.WriteLine("Unable to initialize SDL. Error: {0}", SDL.SDL_GetError());
+                Console.WriteLine("Unable to initialize SDL. Error: {0}", SDL.GetError());
             }
 
             var window = IntPtr.Zero;
             var renderer = IntPtr.Zero;
 
-            SDL.SDL_WindowFlags flags = SDL.SDL_WindowFlags.SDL_WINDOW_RESIZABLE;
+            SDL.WindowFlags flags = SDL.WindowFlags.Resizable;
 
             if (settings.fullscreen)
             {
-                flags |= SDL.SDL_WindowFlags.SDL_WINDOW_FULLSCREEN_DESKTOP;
+                flags |= SDL.WindowFlags.Fullscreen;
             }
 
-            window = SDL.SDL_CreateWindow("Chip8-emu", SDL.SDL_WINDOWPOS_CENTERED, SDL.SDL_WINDOWPOS_CENTERED
-                , settings.xresolution, settings.yresolution, flags);
+            window = SDL.CreateWindow("Chip8-emu", settings.xresolution, settings.yresolution, flags);
 
             if (window == IntPtr.Zero)
             {
-                Console.WriteLine("Unable to create a window. SDL. Error: {0}", SDL.SDL_GetError());
+                Console.WriteLine("Unable to create a window. SDL. Error: {0}", SDL.GetError());
             }
 
-            renderer = SDL.SDL_CreateRenderer(window, -1, SDL.SDL_RendererFlags.SDL_RENDERER_ACCELERATED | SDL.SDL_RendererFlags.SDL_RENDERER_TARGETTEXTURE);
+            renderer = SDL.CreateRenderer(window, null);
 
             if (renderer == IntPtr.Zero)
             {
-                Console.WriteLine("Unable to create a renderer. SDL. Error: {0}", SDL.SDL_GetError());
+                Console.WriteLine("Unable to create a renderer. SDL. Error: {0}", SDL.GetError());
             }
 
-            SDL.SDL_Event e;
+            SDL.Event e;
             bool quit = false;
 
 
@@ -55,153 +53,156 @@ namespace VirtualC8
 
             Console.WriteLine();
 
+            IntPtr texture = SDL.CreateTexture(renderer, SDL.PixelFormat.RGBA8888, SDL.TextureAccess.Target, 64, 32);
+            SDL.SetTextureScaleMode(texture, SDL.ScaleMode.Nearest);
+
             while (!quit)
             {
-                while (SDL.SDL_PollEvent(out e) != 0)
+                while (SDL.PollEvent(out e))
                 {
-                    switch (e.type)
+                    switch (e.Type)
                     {
-                        case SDL.SDL_EventType.SDL_QUIT:
+                        case (uint) SDL.EventType.Quit:
                             quit = true;
                             break;
 
-                        case SDL.SDL_EventType.SDL_KEYDOWN:
-                            if (e.key.keysym.sym == SDL.SDL_Keycode.SDLK_ESCAPE)
+                        case (uint) SDL.EventType.KeyDown:
+                            if (e.Key.Key == SDL.Keycode.Escape)
                             {
                                 quit = true;
                             }
-                            else if (e.key.keysym.sym == keys["1"])
+                            else if (e.Key.Key == keys["1"])
                             {
                                 chip8.keys[0x1] = 1;
                             }
-                            else if (e.key.keysym.sym == keys["2"])
+                            else if (e.Key.Key == keys["2"])
                             {
                                 chip8.keys[0x2] = 1;
                             }
-                            else if (e.key.keysym.sym == keys["3"])
+                            else if (e.Key.Key == keys["3"])
                             {
                                 chip8.keys[0x3] = 1;
                             }
-                            else if (e.key.keysym.sym == keys["C"])
+                            else if (e.Key.Key == keys["C"])
                             {
                                 chip8.keys[0xC] = 1;
                             }
-                            else if (e.key.keysym.sym == keys["4"])
+                            else if (e.Key.Key == keys["4"])
                             {
                                 chip8.keys[0x4] = 1;
                             }
-                            else if (e.key.keysym.sym == keys["5"])
+                            else if (e.Key.Key == keys["5"])
                             {
                                 chip8.keys[0x5] = 1;
                             }
-                            else if (e.key.keysym.sym == keys["6"])
+                            else if (e.Key.Key == keys["6"])
                             {
                                 chip8.keys[0x6] = 1;
                             }
-                            else if (e.key.keysym.sym == keys["D"])
+                            else if (e.Key.Key == keys["D"])
                             {
                                 chip8.keys[0xD] = 1;
                             }
-                            else if (e.key.keysym.sym == keys["7"])
+                            else if (e.Key.Key == keys["7"])
                             {
                                 chip8.keys[0x7] = 1;
                             }
-                            else if (e.key.keysym.sym == keys["8"])
+                            else if (e.Key.Key == keys["8"])
                             {
                                 chip8.keys[0x8] = 1;
                             }
-                            else if (e.key.keysym.sym == keys["9"])
+                            else if (e.Key.Key == keys["9"])
                             {
                                 chip8.keys[0x9] = 1;
                             }
-                            else if (e.key.keysym.sym == keys["E"])
+                            else if (e.Key.Key == keys["E"])
                             {
                                 chip8.keys[0xE] = 1;
                             }
-                            else if (e.key.keysym.sym == keys["A"])
+                            else if (e.Key.Key == keys["A"])
                             {
                                 chip8.keys[0xA] = 1;
                             }
-                            else if (e.key.keysym.sym == keys["0"])
+                            else if (e.Key.Key == keys["0"])
                             {
                                 chip8.keys[0x0] = 1;
                             }
-                            else if (e.key.keysym.sym == keys["B"])
+                            else if (e.Key.Key == keys["B"])
                             {
                                 chip8.keys[0xB] = 1;
                             }
-                            else if (e.key.keysym.sym == keys["F"])
+                            else if (e.Key.Key == keys["F"])
                             {
                                 chip8.keys[0xF] = 1;
                             }                            
                             break;
 
-                        case SDL.SDL_EventType.SDL_KEYUP:
-                            if (e.key.keysym.sym == SDL.SDL_Keycode.SDLK_ESCAPE)
+                        case (uint) SDL.EventType.KeyUp:
+                            if (e.Key.Key == SDL.Keycode.Escape)
                             {
                                 quit = true;
                             }
-                            else if (e.key.keysym.sym == keys["1"])
+                            else if (e.Key.Key == keys["1"])
                             {
                                 chip8.keys[0x1] = 0;
                             }
-                            else if (e.key.keysym.sym == keys["2"])
+                            else if (e.Key.Key == keys["2"])
                             {
                                 chip8.keys[0x2] = 0;
                             }
-                            else if (e.key.keysym.sym == keys["3"])
+                            else if (e.Key.Key == keys["3"])
                             {
                                 chip8.keys[0x3] = 0;
                             }
-                            else if (e.key.keysym.sym == keys["C"])
+                            else if (e.Key.Key == keys["C"])
                             {
                                 chip8.keys[0xC] = 0;
                             }
-                            else if (e.key.keysym.sym == keys["4"])
+                            else if (e.Key.Key == keys["4"])
                             {
                                 chip8.keys[0x4] = 0;
                             }
-                            else if (e.key.keysym.sym == keys["5"])
+                            else if (e.Key.Key == keys["5"])
                             {
                                 chip8.keys[0x5] = 0;
                             }
-                            else if (e.key.keysym.sym == keys["6"])
+                            else if (e.Key.Key == keys["6"])
                             {
                                 chip8.keys[0x6] = 0;
                             }
-                            else if (e.key.keysym.sym == keys["D"])
+                            else if (e.Key.Key == keys["D"])
                             {
                                 chip8.keys[0xD] = 0;
                             }
-                            else if (e.key.keysym.sym == keys["7"])
+                            else if (e.Key.Key == keys["7"])
                             {
                                 chip8.keys[0x7] = 0;
                             }
-                            else if (e.key.keysym.sym == keys["8"])
+                            else if (e.Key.Key == keys["8"])
                             {
                                 chip8.keys[0x8] = 0;
                             }
-                            else if (e.key.keysym.sym == keys["9"])
+                            else if (e.Key.Key == keys["9"])
                             {
                                 chip8.keys[0x9] = 0;
                             }
-                            else if (e.key.keysym.sym == keys["E"])
+                            else if (e.Key.Key == keys["E"])
                             {
                                 chip8.keys[0xE] = 0;
                             }
-                            else if (e.key.keysym.sym == keys["A"])
+                            else if (e.Key.Key == keys["A"])
                             {
                                 chip8.keys[0xA] = 0;
                             }
-                            else if (e.key.keysym.sym == keys["0"])
+                            else if (e.Key.Key == keys["0"])
                             {
                                 chip8.keys[0x0] = 0;
                             }
-                            else if (e.key.keysym.sym == keys["B"])
+                            else if (e.Key.Key == keys["B"])
                             {
                                 chip8.keys[0xB] = 0;
                             }
-                            else if (e.key.keysym.sym == keys["F"])
+                            else if (e.Key.Key == keys["F"])
                             {
                                 chip8.keys[0xF] = 0;
                             }
@@ -213,30 +214,29 @@ namespace VirtualC8
 
                 if (chip8.draw_flag)
                 {
-                    IntPtr texture = SDL.SDL_CreateTexture(renderer, SDL.SDL_PIXELFORMAT_RGBA8888, 2, 64, 32);
+                    SDL.SetRenderTarget(renderer, texture);
 
-                    SDL.SDL_SetRenderTarget(renderer, texture);
-                    SDL.SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+                    SDL.SetRenderDrawColor(renderer, 0, 0, 0, 255);
+                    SDL.RenderClear(renderer);
 
+                    SDL.SetRenderDrawColor(renderer, 255, 255, 255, 255);
                     for (int i = 0; i < chip8.pixels.Length; i++)
                     {
                         int y = i / 64;
                         int x = i - 64 * y;
                         if (chip8.pixels[i] == 1)
                         {
-                            SDL.SDL_RenderDrawPoint(renderer, x, y);
+                            SDL.RenderPoint(renderer, x, y);
                         }
                     }
 
                     chip8.draw_flag = false;
 
-                    SDL.SDL_SetRenderTarget(renderer, IntPtr.Zero);
-                    SDL.SDL_RenderCopyEx(renderer, texture, IntPtr.Zero, IntPtr.Zero,
-                        0, IntPtr.Zero, SDL.SDL_RendererFlip.SDL_FLIP_NONE);
+                    SDL.SetRenderTarget(renderer, IntPtr.Zero);
 
-                    SDL.SDL_RenderPresent(renderer);
+                    SDL.RenderTexture(renderer, texture, IntPtr.Zero, IntPtr.Zero);
 
-                    SDL.SDL_DestroyTexture(texture);
+                    SDL.RenderPresent(renderer);
                 }
 
                 if (chip8.sound_duration > 0)
@@ -247,9 +247,10 @@ namespace VirtualC8
                 }
             }
 
-            SDL.SDL_DestroyWindow(renderer);
-            SDL.SDL_DestroyWindow(window);
-            SDL.SDL_Quit();
+            SDL.DestroyTexture(texture);
+            SDL.DestroyRenderer(renderer);
+            SDL.DestroyWindow(window);
+            SDL.Quit();
         }
     }
 }
