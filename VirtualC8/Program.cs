@@ -13,7 +13,7 @@ namespace VirtualC8
 
             Dictionary<string, SDL.Keycode> keys = settings.convertKeys();
 
-            if (SDL.Init(SDL.InitFlags.Video | SDL.InitFlags.Audio))
+            if (!SDL.Init(SDL.InitFlags.Video | SDL.InitFlags.Audio))
             {
                 Console.WriteLine("Unable to initialize SDL. Error: {0}", SDL.GetError());
             }
