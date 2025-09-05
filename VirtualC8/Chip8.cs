@@ -51,9 +51,9 @@ namespace VirtualC8
 
         public bool draw_flag;
         public bool sound_flag;
-        Stopwatch stopwatch;
-        long lastTime = 0;
-        long lastTime60 = 0;
+
+        public double cycleTimer = 0;
+        public double sixtyHzTimer = 0;
 
         Random random;
 
@@ -98,10 +98,6 @@ namespace VirtualC8
             draw_flag = true;
 
             random = new Random();
-
-            stopwatch = Stopwatch.StartNew();
-            lastTime = 0;
-            lastTime60 = 0;
         }
 
         public void loadGame(string path)
@@ -113,21 +109,22 @@ namespace VirtualC8
             }
         }
 
-        public void update(){
-            long currentTime = stopwatch.ElapsedMilliseconds;
-            long timeDiff = currentTime - lastTime;
-            long timeDiff60 = currentTime - lastTime60;
-
-            if (timeDiff > 1000/frequency)
-            {
-                emulateCycle();
-                lastTime = currentTime;
-            }
-
-            if (timeDiff60 > 1000 / 60)
+        public void update(double deltaTimeMs)
+        {
+            sixtyHzTimer += deltaTimeMs;
+            if (sixtyHzTimer >= (1000.0 / 60.0))
             {
                 updateTimers();
-                lastTime60 = currentTime;
+                sixtyHzTimer -= (1000.0 / 60.0); // Decrement, don't reset to 0
+            }
+
+            cycleTimer += deltaTimeMs;
+            double cycleIntervalMs = 1000.0 / frequency;
+
+            while (cycleTimer >= cycleIntervalMs)
+            {
+                emulateCycle();
+                cycleTimer -= cycleIntervalMs;
             }
         }
 
